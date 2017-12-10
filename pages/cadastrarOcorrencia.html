@@ -1,5 +1,7 @@
 <div class="row">
     <div class="col-md-4 col-md-offset-4" align="center">
+            <h3>Cadastrar Ocorrências</h3>
+            <hr>
         <div class="form-group">
             <i class="fa fa-user"></i>
             <label for="tipoOcorrencia">
@@ -141,10 +143,12 @@
 
     //DATE PICKER
     $('#datetimepicker1').datetimepicker({
-        format: 'YYYY/MM/DD HH:mm:ss'
+        format: 'YYYY/MM/DD HH:mm:ss',
+        maxDate: moment()
     });
     $('#datetimepicker2').datetimepicker({
-        format: 'YYYY/MM/DD HH:mm:ss'
+        format: 'YYYY/MM/DD HH:mm:ss',
+        maxDate: moment()
     });
 
     //Retorno do select de Tipo de Ocorrencias
