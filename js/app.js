@@ -22,12 +22,6 @@ function redirectPage(page, el){
         $('nav li').removeClass('active');
         $(el).addClass('active');
     }
-    if (page == 4) {
-        $("#content").html('');
-        $("#content").load("pages/mapa.html");
-        $('nav li').removeClass('active');
-        $(el).addClass('active');
-    }
 }
 
 function cadastrarOcorrencia(){
