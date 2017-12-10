@@ -26,14 +26,12 @@ function redirectPage(page, el){
 }
 
 function cadastrarOcorrencia() {
+    var usuario_id = 1; //trazer o id do cookie
     var tipoOcorrencia = $("#ddlTipoOcorrencia").val();
     var data = $("#data").val();
     var bairro = $("#ddlBairro").val();
     var endereco = $("#endereco").val();
     var descricao = $("#descricao").val();
-
-    console.log(data);
-    debugger;
 
     $.ajax({
         type: "POST",
@@ -42,11 +40,17 @@ function cadastrarOcorrencia() {
             "data": data,
             "bairro_id": bairro,
             "endereco": endereco,
-            "descricao": descricao
+            "descricao": descricao,
+            "usuario_id":usuario_id
         },
         url: "http://techsaferj.com.br/znoeste/api/public/Ocorrencia",
         success: function (data) {
-            alert("OK");
+            $("#ddlTipoOcorrencia").val(0);
+            $("#data").val('');
+            $("#ddlBairro").val(0);
+            $("#endereco").val('');
+            $("#descricao").val('');
+            carregarTabelaOcorrenciaPorUsuario();
 
         },
         error: function (e) {
@@ -63,11 +67,7 @@ function listarOcorrencia(){
             type: "GET",
             dataType: "JSON",
             success: function (response) {
-                console.log(response);
-                // var optionHeroi = "<option value='0'>--Select Hero--</option>";
-                // $.each(response, function (i, item) {
-                //     optionHeroi += "<option value='" + item.id + "'>" + item.name + "</option>";
-                // }); //Fim Each
+
    
             },
             error: function (e) {

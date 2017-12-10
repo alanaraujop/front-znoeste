@@ -53,28 +53,99 @@
 
 <div class="row">
     <div class="col-md-12">
-            <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Tipo de ocorrência:</th>					
-                            <th>Data da ocorrência:</th>
-                            
-                            <th>Bairro:</th>
-                            <th>Endereço:</th>
-                            <th>Descrição:</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody id="dados-tabela">
-                        
-                    </tbody>
-                </table>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Tipo de ocorrência:</th>
+                    <th>Data da ocorrência:</th>
+                    <th>Bairro:</th>
+                    <th>Endereço:</th>
+                    <th>Descrição:</th>
+
+                </tr>
+            </thead>
+            <tbody id="dados-tabela"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalEditarOcorrencia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Editar Ocorrência</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="ocorrencia_id">
+                <div class="form-group">
+                    <i class="fa fa-user"></i>
+                    <label for="tipoOcorrencia">
+                        <b> Tipo ocorrência:</b>
+                    </label>
+                    <div id="cloneDDLTipo"></div>
+                </div>
+                <div class="form-group">
+                    <i class="fa fa-user"></i>
+                    <label for="data">
+                        <b> Data da ocorrência:</b>
+                    </label>
+
+                    <div class="input-group date" id="datetimepicker2">
+                        <input type="text" class="form-control" id="modalData" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <i class="fa fa-user"></i>
+                    <label for="bairro">
+                        <b> Bairro:</b>
+                    </label>
+
+                    <div id="cloneDDLBairro"></div>
+
+                </div>
+
+                <div class="form-group">
+                    <i class="fa fa-user"></i>
+                    <label for="endereco">
+                        <b> Endereço:</b>
+                    </label>
+                    <input type="text" maxlength="30" class="form-control" id="modalEndereco" value="" placeholder="" />
+                </div>
+
+                <div class="form-group">
+                    <i class="fa fa-user"></i>
+                    <label for="descricao">
+                        <b> Descrição:</b>
+                    </label>
+                    <input type="text" maxlength="255" class="form-control" id="modalDescricao" value="" placeholder="" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button onclick="editarOcorrencia()" type="button" class="btn btn-primary">Salvar mudanças</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    //carregando a tabela de ocorrencias por usuário
+    carregarTabelaOcorrenciaPorUsuario();
+
     //DATE PICKER
-    $('#datetimepicker1').datetimepicker();
+    $('#datetimepicker1').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm:ss'
+    });
+    $('#datetimepicker2').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm:ss'
+    });
 
     //Retorno do select de Tipo de Ocorrencias
     $.ajax({
@@ -103,7 +174,6 @@
         type: "GET",
         dataType: "JSON",
         success: function (response) {
-            //console.log(response);
             var optionBairro = "<option value='0'>Selecione o bairro</option>";
             $.each(response, function (i, item) {
                 optionBairro += "<option value='" + item.id + "'>" + item.nome + "</option>";
@@ -118,44 +188,126 @@
 
     });
 
-    // Id do usuário (Pegar do cookie)
-    var id_usuario = 1;
+    function carregarTabelaOcorrenciaPorUsuario() {
+        $("#dados-tabela").html('');
+        // Id do usuário (Pegar do cookie)
+        var id_usuario = 1;
 
-    //Retorno das ocorrencias do usuário
-    $.ajax({
-        url: "http://techsaferj.com.br/znoeste/api/public/OcorrenciasPorUsuario/"+id_usuario,
-        type: "GET",
-        dataType: "JSON",
-        success: function (response) {
-            var linha = "";
-            var col1 = "";
-            var col2 = "";
-            var col3 = "";
-            var col4 = "";
-            var col5 = "";
+        //Retorno das ocorrencias do usuário
+        $.ajax({
+            url: "http://techsaferj.com.br/znoeste/api/public/OcorrenciasPorUsuario/" + id_usuario,
+            type: "GET",
+            dataType: "JSON",
+            success: function (response) {
+                var linha = "";
+                var col1 = "";
+                var col2 = "";
+                var col3 = "";
+                var col4 = "";
+                var col5 = "";
+                var col6 = "";
+                var col7 = "";
 
-            $.each(response, function(i, item) {
-                linha = "";
-                col1 = "";
-                col2 = "";
-                col3 = "";
-                col4 = "";
-                col5 = "";
+                $.each(response, function (i, item) {
+                    linha = "";
+                    col1 = "";
+                    col2 = "";
+                    col3 = "";
+                    col4 = "";
+                    col5 = "";
+                    col6 = "";
+                    col7 = "";
 
-                col1 = "<td>"+ item.tipo_ocorrencia_id + "</td>";
-                col2 = "<td>"+ item.data +"</td>";
-                col3 = "<td>"+ item.bairro_id +"</td>";
-                col4 = "<td>"+ item.endereco +"</td>";
-                col5 = "<td>"+ item.descricao +"</td>";
+                    col1 = "<td>" + item.tipo_ocorrencia + "</td>";
+                    col2 = "<td>" + item.data + "</td>";
+                    col3 = "<td>" + item.bairro + "</td>";
+                    col4 = "<td>" + item.endereco + "</td>";
+                    col5 = "<td>" + item.descricao + "</td>";
+                    col6 = "<td><button type='button' class='btn btn-success' data-toggle='modal' onclick='modalEditarOcorrencia(" + item.id + ")'>Editar</button></td>";
+                    col7 = "<td><a type='button' class='btn btn-danger' onclick=deleteOcorrencia(" + item.id + ")>Deletar</a></td>";
+                    linha = "<tr>" + col1 + col2 + col3 + col4 + col5 + col6 + col7 + "</tr>";
 
-                linha = "<tr>" + col1 + col2 + col3 + col4 + col5 + "</tr>";
 
-                $("#dados-tabela").append(linha);
-            });
+                    $("#dados-tabela").append(linha);
+                });
 
-        },
-        error: function (e) {
-            console.log("Erro: " + e);
-        }
-    });
+            },
+            error: function (e) {
+                console.log("Erro: " + e);
+            }
+        });
+    }
+
+    // Função para deletar Ocorrencias
+    function deleteOcorrencia(id) {
+        $.ajax({
+            type: "DELETE",
+            data: { "id": id },
+            url: "http://techsaferj.com.br/znoeste/api/public/Ocorrencia/" + id,
+            success: function (response) {
+                carregarTabelaOcorrenciaPorUsuario();
+            },
+            error: function (e) {
+                console.log("Erro:" + e);
+            }
+        });
+    }
+
+    // Função para editar Ocorrencia
+    function modalEditarOcorrencia(id) {
+        $("#cloneDDLTipo").html('');
+        $("#cloneDDLBairro").html('');
+        $("#ddlTipoOcorrencia").clone().appendTo("#cloneDDLTipo");
+        $("#ddlBairro").clone().appendTo("#cloneDDLBairro");
+
+        $.ajax({
+            url: "http://techsaferj.com.br/znoeste/api/public/ReturnOcorrencia/" + id,
+            type: "GET",
+            dataType: "JSON",
+            success: function (response) {
+                $('#modalEditarOcorrencia').modal("show");
+
+                var editar_tipoOcorrencia = response.tipo_ocorrencia_id;
+                var editar_data = response.data;
+                var editar_bairro = response.bairro_id;
+                var editar_endereco = response.endereco;
+                var editar_descricao = response.descricao;
+                var ocorrencia_id = response.id;
+
+                $("#ocorrencia_id").val(ocorrencia_id);
+                $("#cloneDDLTipo > select").val(parseInt(editar_tipoOcorrencia));
+                $("#cloneDDLBairro > select").val(parseInt(editar_bairro));
+                $("#modalData").val(editar_data);
+                $("#modalEndereco").val(editar_endereco);
+                $("#modalDescricao").val(editar_descricao);
+
+            },
+            error: function (e) {
+                console.log("Erro: " + e);
+            }
+        });
+    }
+
+    function editarOcorrencia() {
+        var tipo = $("#cloneDDLTipo > select").val();
+        var bairro = $("#cloneDDLBairro > select").val();
+        var data = $("#modalData").val();
+        var endereco = $("#modalEndereco").val();
+        var descricao = $("#modalDescricao").val();
+        var ocorrencia_id = $("#ocorrencia_id").val();
+
+        $.ajax({
+            url: "http://techsaferj.com.br/znoeste/api/public/Ocorrencia/" + ocorrencia_id,
+            type: "PUT",
+            dataType: "JSON",
+            data: { "endereco": endereco, "data": data, "descricao": descricao, "bairro_id": bairro, "tipo_ocorrencia_id": tipo },
+            success: function () {
+                carregarTabelaOcorrenciaPorUsuario();
+                $('#modalEditarOcorrencia').modal("hide");
+            },
+            error: function (e) {
+                console.log("Erro: " + e);
+            }
+        });
+    }
 </script>
