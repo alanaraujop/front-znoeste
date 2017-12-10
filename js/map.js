@@ -1,4 +1,4 @@
-  $.get("http://techsaferj.com.br/znoeste/api/public/Ocorrencia", function(data, status) {
+  $.get("http://techsaferj.com.br/znoeste/api/public/OcorrenciasPorBairros", function(data, status) {
       initMap(data)
   });
 
