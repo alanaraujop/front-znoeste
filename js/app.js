@@ -3,24 +3,30 @@ $(document).ready(function(){
     $("#content").load("pages/inicio.html");
 });
 
-function redirectPage(page){
+function redirectPage(page, el){
     if (page == 1) {
         $("#content").html('');
         $("#content").load("pages/inicio.html");
         $('nav li').removeClass('active');
-        $($this).addClass('active');
+        $(el).addClass('active');
     }
     if (page == 2) {
         $("#content").html('');
         $("#content").load("pages/cadastrarOcorrencia.html");
+        $('nav li').removeClass('active');
+        $(el).addClass('active');
     }
     if (page == 3) {
         $("#content").html('');
         $("#content").load("pages/listarOcorrencias.html");
+        $('nav li').removeClass('active');
+        $(el).addClass('active');
     }
     if (page == 4) {
         $("#content").html('');
         $("#content").load("pages/mapa.html");
+        $('nav li').removeClass('active');
+        $(el).addClass('active');
     }
 }
 
