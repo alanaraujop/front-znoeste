@@ -1,1 +1,161 @@
-<p>Cadastro Ocorrencia</p>
+<div class="row">
+    <div class="col-md-4 col-md-offset-4" align="center">
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <label for="tipoOcorrencia">
+                <b> Tipo ocorrência:</b>
+            </label>
+            <select class="form-control" id="ddlTipoOcorrencia"></select>
+        </div>
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <label for="data">
+                <b> Data da ocorrência:</b>
+            </label>
+
+            <div class="input-group date" id="datetimepicker1">
+                <input type="text" class="form-control" id="data" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <label for="bairro">
+                <b> Bairro:</b>
+            </label>
+
+            <select class="form-control" id="ddlBairro"></select>
+
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <label for="endereco">
+                <b> Endereço:</b>
+            </label>
+            <input type="text" maxlength="30" class="form-control" id="endereco" value="" placeholder="" />
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <label for="descricao">
+                <b> Descrição:</b>
+            </label>
+            <input type="text" maxlength="255" class="form-control" id="descricao" value="" placeholder="" />
+        </div>
+
+        <input type="button" class="btn btn-primary" value="Cadastrar Dados" onclick="cadastrarOcorrencia()">
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+            <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tipo de ocorrência:</th>					
+                            <th>Data da ocorrência:</th>
+                            
+                            <th>Bairro:</th>
+                            <th>Endereço:</th>
+                            <th>Descrição:</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="dados-tabela">
+                        
+                    </tbody>
+                </table>
+    </div>
+</div>
+
+<script>
+    //DATE PICKER
+    $('#datetimepicker1').datetimepicker();
+
+    //Retorno do select de Tipo de Ocorrencias
+    $.ajax({
+        url: "http://techsaferj.com.br/znoeste/api/public/TipoOcorrencia",
+        type: "GET",
+        dataType: "JSON",
+        success: function (response) {
+            //console.log(response);
+            var optionTipoOcorrencia = "<option value='0'>Selecione o tipo de ocorrencia</option>";
+            $.each(response, function (i, item) {
+                optionTipoOcorrencia += "<option value='" + item.id + "'>" + item.descricao + "</option>";
+            }); //Fim Each
+
+            $("#ddlTipoOcorrencia").append(optionTipoOcorrencia);
+
+        },
+        error: function (e) {
+            console.log("Erro: " + e);
+        }
+
+    });
+
+    // Retorno do select dos bairros
+    $.ajax({
+        url: "http://techsaferj.com.br/znoeste/api/public/Bairro",
+        type: "GET",
+        dataType: "JSON",
+        success: function (response) {
+            //console.log(response);
+            var optionBairro = "<option value='0'>Selecione o bairro</option>";
+            $.each(response, function (i, item) {
+                optionBairro += "<option value='" + item.id + "'>" + item.nome + "</option>";
+            }); //Fim Each
+
+            $("#ddlBairro").append(optionBairro);
+
+        },
+        error: function (e) {
+            console.log("Erro: " + e);
+        }
+
+    });
+
+    // Id do usuário (Pegar do cookie)
+    var id_usuario = 1;
+
+    //Retorno das ocorrencias do usuário
+    $.ajax({
+        url: "http://techsaferj.com.br/znoeste/api/public/OcorrenciasPorUsuario/"+id_usuario,
+        type: "GET",
+        dataType: "JSON",
+        success: function (response) {
+            var linha = "";
+            var col1 = "";
+            var col2 = "";
+            var col3 = "";
+            var col4 = "";
+            var col5 = "";
+
+            $.each(response, function(i, item) {
+                linha = "";
+                col1 = "";
+                col2 = "";
+                col3 = "";
+                col4 = "";
+                col5 = "";
+
+                col1 = "<td>"+ item.tipo_ocorrencia_id + "</td>";
+                col2 = "<td>"+ item.data +"</td>";
+                col3 = "<td>"+ item.bairro_id +"</td>";
+                col4 = "<td>"+ item.endereco +"</td>";
+                col5 = "<td>"+ item.descricao +"</td>";
+
+                linha = "<tr>" + col1 + col2 + col3 + col4 + col5 + "</tr>";
+
+                $("#dados-tabela").append(linha);
+            });
+
+        },
+        error: function (e) {
+            console.log("Erro: " + e);
+        }
+    });
+</script>

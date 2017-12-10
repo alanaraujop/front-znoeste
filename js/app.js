@@ -21,10 +21,38 @@ function redirectPage(page, el){
         $("#content").load("pages/listarOcorrencias.html");
         $('nav li').removeClass('active');
         $(el).addClass('active');
+        listarOcorrencia();
     }
 }
 
-function cadastrarOcorrencia(){
+function cadastrarOcorrencia() {
+    var tipoOcorrencia = $("#ddlTipoOcorrencia").val();
+    var data = $("#data").val();
+    var bairro = $("#ddlBairro").val();
+    var endereco = $("#endereco").val();
+    var descricao = $("#descricao").val();
+
+    console.log(data);
+    debugger;
+
+    $.ajax({
+        type: "POST",
+        data: {
+            "tipo_ocorrencia_id":tipoOcorrencia,
+            "data": data,
+            "bairro_id": bairro,
+            "endereco": endereco,
+            "descricao": descricao
+        },
+        url: "http://techsaferj.com.br/znoeste/api/public/Ocorrencia",
+        success: function (data) {
+            alert("OK");
+
+        },
+        error: function (e) {
+            console.log("Erro: " + e);
+        }
+    });
 
 }
 
