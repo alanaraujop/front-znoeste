@@ -195,7 +195,7 @@
     function carregarTabelaOcorrenciaPorUsuario() {
         $("#dados-tabela").html('');
         // Id do usuário (Pegar do cookie)
-        var id_usuario = 1;
+        var id_usuario = cookieId;
 
         //Retorno das ocorrencias do usuário
         $.ajax({

@@ -1,13 +1,13 @@
 $(document).ready(function () {
-    var user = localStorage.getItem("email");
-    var id = localStorage.getItem("id");
-    var nivel_acesso = localStorage.getItem("nivel_acesso");
+    cookieEmail = localStorage.getItem("email");
+    cookieId = localStorage.getItem("id");
+    cookieNivelAcesso = localStorage.getItem("nivel_acesso");
 
-    if (user != "" && user != null && nivel_acesso == 1) {
+    if (cookieEmail != "" && cookieEmail != null && cookieNivelAcesso == 1) {
         $("#content").html('');
         redirectPage(1, null);
     }
-    if (user == "" || user == null) {
+    if (cookieEmail == "" || cookieEmail == null) {
         $("#content").html('');
         $("#content").load("pages/login.html");
     }
@@ -41,7 +41,7 @@ function redirectPage(page, el) {
 
 //Cadastro de Ocorrencias da página de ocorrencias
 function cadastrarOcorrencia() {
-    var usuario_id = 1; //trazer o id do cookie
+    var usuario_id = cookieId;
     var tipoOcorrencia = $("#ddlTipoOcorrencia").val();
     var data = $("#data").val();
     var bairro = $("#ddlBairro").val();
