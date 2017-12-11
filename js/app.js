@@ -3,47 +3,77 @@ $(document).ready(function () {
     cookieId = localStorage.getItem("id");
     cookieNivelAcesso = localStorage.getItem("nivel_acesso");
 
-    if (cookieEmail != "" && cookieEmail != null && cookieNivelAcesso == 1) {
-        $("#content").html('');
+    //Se existe cookie e o nivel de acesso é usuáiro então redireciona para tela de usuário
+    if (cookieEmail != "" && cookieEmail != null) {
+        limparTemplate();
         redirectPage(1, null);
     }
     if (cookieEmail == "" || cookieEmail == null) {
-        $("#content").html('');
+        limparTemplate();
         $("#content").load("pages/login.html");
     }
 });
 
 //Redirecionamento das páginas SPA
 function redirectPage(page, el) {
+    // Limpando a classe active para assim que entrar no IF ativar
+    $('nav li').removeClass('active');
+    limparTemplate();
     if (page == 1) {
-        $("#content").html('');
-        $("#header").load("pages/header.html");
+        if (cookieNivelAcesso == 1) {
+            $("#header").load("pages/header.html");
+        } else {
+            $("#header").load("pages/headerAdmin.html");
+        }
         $("#content").load("pages/inicio.html");
-        $('nav li').removeClass('active');
         $('nav li:nth-child(1)').addClass('active');
     }
     if (page == 2) {
-        $("#content").html('');
-        $("#header").load("pages/header.html");
+        if (cookieNivelAcesso == 1) {
+            $("#header").load("pages/header.html");
+        } else {
+            $("#header").load("pages/headerAdmin.html");
+        }
         $("#content").load("pages/cadastrarOcorrencia.html");
-        $('nav li').removeClass('active');
         $(el).addClass('active');
     }
     if (page == 3) {
-        $("#content").html('');
-        $("#header").load("pages/header.html");
+        if (cookieNivelAcesso == 1) {
+            $("#header").load("pages/header.html");
+        } else {
+            $("#header").load("pages/headerAdmin.html");
+        }
         $("#content").load("pages/listarOcorrencias.html");
-        $('nav li').removeClass('active');
         $(el).addClass('active');
     }
     if (page == 4) {
-        $("#content").html('');
-        $("#header").load("pages/header.html");
+        if (cookieNivelAcesso == 1) {
+            $("#header").load("pages/header.html");
+        } else {
+            $("#header").load("pages/headerAdmin.html");
+        }
         $("#content").load("pages/meuPerfil.html");
-        $('nav li').removeClass('active');
         $(el).addClass('active');
         carregarUsuairo();
     }
+    //Somente admin pode ver essa página por isso não tem o if do header
+    if (page == 5) {
+        $("#header").load("pages/headerAdmin.html");
+        $("#content").load("pages/listarUsuarios.html");
+        $(el).addClass('active');
+    }
+    //Somente admin pode ver essa página por isso não tem o if do header
+    if (page == 6) {
+        $("#header").load("pages/headerAdmin.html");
+        $("#content").load("pages/cadastrarBairro.html");
+        $(el).addClass('active');
+    }
+}
+
+//Limpa o conteudo das Divs template
+function limparTemplate() {
+    $("#content").html('');
+    $("#header").html('');
 }
 
 //Cadastro de Ocorrencias da página de ocorrencias
@@ -117,7 +147,7 @@ function editarUsuario() {
         url: "http://techsaferj.com.br/znoeste/api/public/Usuario/" + usuario_id,
         type: "PUT",
         dataType: "JSON",
-        data:{"nome":nome, "cpf": cpf, "data_nasc":data_nasc,"email":email,"senha": senha},
+        data: { "nome": nome, "cpf": cpf, "data_nasc": data_nasc, "email": email, "senha": senha },
         success: function (response) {
             alert("Alterado com sucesso");
             redirectPage(4, null);
@@ -153,11 +183,9 @@ function login() {
 }
 
 function logout() {
+    limparTemplate();
     localStorage.clear();
-    $("#header").html('');
-    $("#content").html('');
     $("#content").load("pages/login.html");
-
 }
 
 function redefinirSenha() {
