@@ -35,7 +35,14 @@ function redirectPage(page, el) {
         $("#content").load("pages/listarOcorrencias.html");
         $('nav li').removeClass('active');
         $(el).addClass('active');
-        listarOcorrencia();
+    }
+    if (page == 4) {
+        $("#content").html('');
+        $("#header").load("pages/header.html");
+        $("#content").load("pages/meuPerfil.html");
+        $('nav li').removeClass('active');
+        $(el).addClass('active');
+        carregarUsuairo();
     }
 }
 
@@ -79,8 +86,46 @@ function cadastrarUsuario() {
 
 }
 
-function editarUsuario() {
+function carregarUsuairo() {
+    var usuario_id = cookieId;
 
+    $.ajax({
+        url: "http://techsaferj.com.br/znoeste/api/public/Usuario/" + usuario_id,
+        type: "GET",
+        dataType: "JSON",
+        success: function (response) {
+            $("#nome").val(response.nome);
+            $("#cpf").val(response.cpf);
+            $("#data_nasc").val(response.data_nasc);
+            $("#email").val(response.email);
+            $("#senha").val(response.senha);
+        },
+        error: function (e) {
+            console.log("Erro: " + e);
+        }
+    });
+}
+
+function editarUsuario() {
+    var usuario_id = cookieId;
+    var nome = $("#nome").val();
+    var cpf = $("#cpf").val();
+    var data_nasc = $("#data_nasc").val();
+    var email = $("#email").val();
+    var senha = $("#senha").val();
+    $.ajax({
+        url: "http://techsaferj.com.br/znoeste/api/public/Usuario/" + usuario_id,
+        type: "PUT",
+        dataType: "JSON",
+        data:{"nome":nome, "cpf": cpf, "data_nasc":data_nasc,"email":email,"senha": senha},
+        success: function (response) {
+            alert("Alterado com sucesso");
+            redirectPage(4, null);
+        },
+        error: function (e) {
+            console.log("Erro: " + e);
+        }
+    });
 }
 
 function login() {
