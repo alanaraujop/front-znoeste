@@ -13,7 +13,7 @@ Por ultimo:
 verificar a classe active que não está ativando quando muda de menu
 modal deletar;
 mensagens de sucesso ou erro;
-Validações;
+Validações(desabilitar campos que não podem ser alterados);
 redefinir senha (passando email e cpf);
 esqueceu senha(TOKEN);
 --------------------------------------- Italo Enviou ---------------------------------------
