@@ -125,9 +125,9 @@ function carregarUsuairo() {
         dataType: "JSON",
         success: function (response) {
             $("#nome").val(response.nome);
-            $("#cpf").val(response.cpf);
+            $("#cpf").val(response.cpf).prop("disabled", "disabled");;
             $("#data_nasc").val(response.data_nasc);
-            $("#email").val(response.email);
+            $("#email").val(response.email).prop("disabled", "disabled");
             $("#senha").val(response.senha);
         },
         error: function (e) {
@@ -147,7 +147,7 @@ function editarUsuario() {
         url: "http://techsaferj.com.br/znoeste/api/public/Usuario/" + usuario_id,
         type: "PUT",
         dataType: "JSON",
-        data: { "nome": nome, "cpf": cpf, "data_nasc": data_nasc, "email": email, "senha": senha },
+        data: { "nome": nome, "data_nasc": data_nasc, "senha": senha },
         success: function (response) {
             alert("Alterado com sucesso");
             redirectPage(4, null);
