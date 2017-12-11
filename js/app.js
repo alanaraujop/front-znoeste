@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
     cookieEmail = localStorage.getItem("email");
     cookieId = localStorage.getItem("id");
     cookieNivelAcesso = localStorage.getItem("nivel_acesso");
@@ -10,12 +10,16 @@ $(document).ready(function () {
     }
     if (cookieEmail == "" || cookieEmail == null) {
         limparTemplate();
-        $("#content").load("pages/login.html");
+        // $("#content").load("pages/login.html");
+        $("#header").load("pages/headerBlog.html");
+        $("#content").load("pages/inicioBlog.html");
     }
 });
 
 //Redirecionamento das páginas SPA
 function redirectPage(page, el) {
+    cookieNivelAcesso = localStorage.getItem("nivel_acesso");
+
     // Limpando a classe active para assim que entrar no IF ativar
     $('nav li').removeClass('active');
     limparTemplate();
@@ -68,6 +72,26 @@ function redirectPage(page, el) {
         $("#content").load("pages/cadastrarBairro.html");
         $(el).addClass('active');
     }
+    if (page == 7) {
+        $("#header").load("pages/headerBlog.html");
+        $("#content").load("pages/inicioBlog.html");
+        $(el).addClass('active');
+    }
+    if (page == 8) {
+        $("#header").load("pages/headerBlog.html");
+        $("#content").load("pages/contato.html");
+        $(el).addClass('active');
+    }
+    if (page == 9) {
+        $("#header").load("pages/headerBlog.html");
+        $("#content").load("pages/sobre.html");
+        $(el).addClass('active');
+    }
+    if (page == 10) {
+        $("#header").load("pages/headerBlog.html");
+        $("#content").load("pages/login.html");
+        $(el).addClass('active');
+    }
 }
 
 //Limpa o conteudo das Divs template
@@ -96,7 +120,7 @@ function cadastrarOcorrencia() {
             "usuario_id": usuario_id
         },
         url: "http://techsaferj.com.br/znoeste/api/public/Ocorrencia",
-        success: function (data) {
+        success: function(data) {
             $("#ddlTipoOcorrencia").val(0);
             $("#data").val('');
             $("#ddlBairro").val(0);
@@ -105,7 +129,7 @@ function cadastrarOcorrencia() {
             carregarTabelaOcorrenciaPorUsuario();
 
         },
-        error: function (e) {
+        error: function(e) {
             console.log("Erro: " + e);
         }
     });
@@ -123,14 +147,14 @@ function carregarUsuairo() {
         url: "http://techsaferj.com.br/znoeste/api/public/Usuario/" + usuario_id,
         type: "GET",
         dataType: "JSON",
-        success: function (response) {
+        success: function(response) {
             $("#nome").val(response.nome);
             $("#cpf").val(response.cpf).prop("disabled", "disabled");;
             $("#data_nasc").val(response.data_nasc);
             $("#email").val(response.email).prop("disabled", "disabled");
             $("#senha").val(response.senha);
         },
-        error: function (e) {
+        error: function(e) {
             console.log("Erro: " + e);
         }
     });
@@ -148,11 +172,11 @@ function editarUsuario() {
         type: "PUT",
         dataType: "JSON",
         data: { "nome": nome, "data_nasc": data_nasc, "senha": senha },
-        success: function (response) {
+        success: function(response) {
             alert("Alterado com sucesso");
             redirectPage(4, null);
         },
-        error: function (e) {
+        error: function(e) {
             console.log("Erro: " + e);
         }
     });
@@ -170,13 +194,13 @@ function login() {
             "senha": senha,
         },
         url: "http://techsaferj.com.br/znoeste/api/public/Login",
-        success: function (response) {
+        success: function(response) {
             localStorage.setItem("id", response.id);
             localStorage.setItem("email", response.email);
             localStorage.setItem("nivel_acesso", response.nivel_acesso);
             redirectPage(1);
         },
-        error: function (e) {
+        error: function(e) {
             console.log("Erro: " + e);
         }
     });
@@ -185,6 +209,7 @@ function login() {
 function logout() {
     limparTemplate();
     localStorage.clear();
+    $("#header").load("pages/headerBlog.html");
     $("#content").load("pages/login.html");
 }
 
